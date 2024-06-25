@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
-
+const ejsMate = require("ejs-mate");
 
 
 app.set("view engine", "ejs");
@@ -12,6 +12,7 @@ app.set("views", path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.use(express.json());
+app.engine("ejs",ejsMate);  //Used for ejs mate
 
 main().then(res => {
     console.log("successfully connected to the database");
@@ -64,6 +65,14 @@ app.put("/listings/:id",async (req,res)=>{
     await Listing.findByIdAndUpdate(id, {...req.body.listing});  //This deconstructs all the data from the body and passes to database
     res.redirect(`/listings/${id}`);
 }); 
+
+
+//Delete route
+app.delete("/listings/:id", async (req,res)=>{
+    let {id} = req.params;
+    await Listing.findByIdAndDelete(id);
+    res.redirect("/listings");
+})
 
 
 // app.get("/testListing", async (req,res)=>{
