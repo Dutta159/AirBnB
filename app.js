@@ -13,6 +13,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.use(express.json());
 app.engine("ejs",ejsMate);  //Used for ejs mate
+app.use(express.static(path.join(__dirname,"public")));
 
 main().then(res => {
     console.log("successfully connected to the database");
