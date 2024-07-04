@@ -4,14 +4,19 @@
         <!-- This is used to get all the form in a single row and then divide it into 12 columns -->
         <div class="col-8 offset-2">
             <h3>Create a new listing</h3>
-            <form action="/listings" method="POST">
+            <form action="/listings" method="POST" novalidate class="needs-validation"> 
+                <!-- novalidate removes the default validation of the browser -->
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input type="text" name="listing[title]" placeholder="Enter title" class="form-control">
+                    <input type="text" name="listing[title]" placeholder="Enter title" class="form-control" required>
+                    <div class="valid-feedback">Title Looks Good</div>
+                    <div class="invalid-feedback">Please Enter a valid Title</div>
+                    <!-- These are called as success or failure texts used in client side validation -->
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea name="listing[description]" placeholder="Enter Description" class="form-control"></textarea>
+                    <textarea name="listing[description]" placeholder="Enter Description" class="form-control" required></textarea>
+                    <div class="invalid-feedback">Please Enter a valid Description</div>
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Image</label>
@@ -20,18 +25,21 @@
                <div class="row">
                 <div class="mb-3 col-md-4">
                     <label for="price" class="form-label">Price</label>
-                    <input name="listing[price]" placeholder="Enter Price" type="number" class="form-control">
+                    <input name="listing[price]" placeholder="Enter Price" type="number" class="form-control" required>
+                    <div class="invalid-feedback">Please Enter a valid price</div>
                 </div>
                 <div class="mb-3 col-md-8">
                     <!-- Ths means they will take 8 columns above medium size else entire row  -->
                     <label for="country" class="form-label">Country</label>
-                    <input type="text" name="listing[country]" placeholder="Enter country" class="form-control">
+                    <input type="text" name="listing[country]" placeholder="Enter country" class="form-control" required>
+                    <div class="invalid-feedback">Please Enter a valid Country name</div>
                 </div>
                 
                </div>
                <div class="mb-3">
                 <label for="location" class="form-label">Location</label>
-                <input type="text" name="listing[location]" placeholder="Enter location" class="form-control">
+                <input type="text" name="listing[location]" placeholder="Enter location" class="form-control" required>
+                <div class="invalid-feedback">Please Enter a valid location</div>
             </div>
                 <button class="btn btn-dark mb-3 ">Create</button>
             </form>

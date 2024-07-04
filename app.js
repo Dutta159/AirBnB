@@ -90,6 +90,10 @@ app.delete("/listings/:id", async (req,res)=>{
 // });
 
 
+app.use((err, req,res, next)=>{
+    res.send("An error has occurred");
+});
+
 app.listen(3000, ()=>{
     console.log("Listening at port 3000");
 });
