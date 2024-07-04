@@ -92,3 +92,16 @@ body{
 .edit-btn{
     border: none;
 }
+
+/* Error page */
+.errpg{
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.errpg h1{
+    color: #fe424d;
+    font-weight: 800;
+}
