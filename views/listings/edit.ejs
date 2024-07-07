@@ -4,7 +4,7 @@
         <!-- This is used to get all the form in a single row and then divide it into 12 columns -->
         <div class="col-8 offset-2">
             <h3>Create a new listing</h3>
-            <form action="/listings" method="POST" novalidate class="needs-validation">
+            <form action="/listings/<%=listing.id%>?_method=PUT" method="POST" novalidate class="needs-validation">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" name="listing[title]" value="<%=listing.title%>" class="form-control" required >

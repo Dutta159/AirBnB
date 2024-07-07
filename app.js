@@ -7,6 +7,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
+const {listingSchema, reviewSchema} = require("./schema.js");
+const Review = require("./models/review.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname,"views"));
@@ -28,6 +30,28 @@ app.get("/", (req,res)=>{
     res.send("Home page has been started");
 });
 
+
+const validateListing =(req,res,next)=>{
+    let {error} = listingSchema.validate(req.body);
+    if(error){
+            let errmsg = error.details.map((el)=>el.message).join(",");  //This can be used to print all details
+            throw new ExpressError(400, error);
+        }
+        else{
+            next();
+        }
+}
+const validateReview =(req,res,next)=>{
+    let {error} = reviewSchema.validate(req.body);
+    if(error){
+            let errmsg = error.details.map((el)=>el.message).join(",");  //This can be used to print all details
+            throw new ExpressError(400, error);
+        } 
+        else{
+            next();
+        }
+}
+
 //This is the index route
 app.get("/listings", wrapAsync(async(req,res)=>{
     const allListings = await Listing.find({}); 
@@ -42,16 +66,14 @@ app.get("/listings/new", (req,res)=>{
 //Show route
 app.get("/listings/:id", wrapAsync(async (req,res)=>{
     const {id} = req.params;
-    const listing =  await Listing.findById(id);
+    const listing =  await Listing.findById(id).populate("reviews"); //This will save the object instead of the ids for the reviews
     res.render("./listings/show.ejs", {listing});
 }));
 
 //create route
-app.post("/listings", wrapAsync(
+//In this validateListing is passed as a middleware 
+app.post("/listings", validateListing, wrapAsync(
     async (req,res)=>{
-        if(!req.body.listing){
-            throw new ExpressError(400,"All fields must be filled");
-        }
         const newListing = new Listing(req.body.listing);
         await newListing.save();
         res.redirect("/listings");
@@ -65,10 +87,7 @@ app.get("/listings/:id/edit", wrapAsync(async (req,res)=>{
 }));
 
 //update route
-app.put("/listings/:id",wrapAsync(async (req,res)=>{
-    if(!req.body.listing){
-        throw new ExpressError(400,"All fields must be filled");
-    }
+app.put("/listings/:id",validateListing, wrapAsync(async (req,res)=>{
     let {id} = req.params;
     console.log(req.body.listing);
     await Listing.findByIdAndUpdate(id, {...req.body.listing});  //This deconstructs all the data from the body and passes to database
@@ -82,6 +101,34 @@ app.delete("/listings/:id", wrapAsync(async (req,res)=>{
     await Listing.findByIdAndDelete(id);
     res.redirect("/listings");
 }));
+
+
+//Reviews
+//Post route
+//In this validateReview is passed as a middleware
+app.post("/listings/:id/reviews",validateReview, wrapAsync(
+    async (req,res)=>{
+        let listing = await Listing.findById(req.params.id);
+        let newReview = new Review(req.body.review);
+        listing.reviews.push(newReview);
+
+        await newReview.save();
+        await listing.save();
+        console.log("New Review saved");
+        res.redirect(`/listings/${listing._id}`);
+    }
+));
+
+//Delete review route
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync(
+    async (req,res)=>{
+        let {id, reviewId} = req.params;
+        await Listing.findByIdAndUpdate(id, {$pull : {reviews:reviewId}});
+        await Review.findByIdAndDelete(reviewId);
+
+        res.redirect(`/listings/${id}`);
+    }
+));
 
 
 // app.get("/testListing", async (req,res)=>{
