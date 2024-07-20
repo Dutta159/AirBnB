@@ -7,7 +7,12 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
-
+const session = require("express-session");
+const flash =  require("connect-flash");
+const passport = require("passport");
+const LocalStrategy =  require("passport-local");
+const User =  require("./models/user.js");
+const userRouter = require("./routes/user.js");
 
 
 
@@ -18,6 +23,18 @@ app.use(methodOverride("_method"));
 app.use(express.json());
 app.engine("ejs",ejsMate);  //Used for ejs mate
 app.use(express.static(path.join(__dirname,"public")));
+
+const sessionOptions = {
+    secret: "your secret code",
+    resave : false,
+    saveUninitialized : true,
+    cookie : {
+        expires : Date.now() + 1000 * 60 * 60 * 24 * 3,
+        maxAge : 1000 * 60 * 60 * 24 * 3,
+        httpOnly:true,  //used to prevent cross scripting attacks
+    }
+};
+
 
 main().then(res => {
     console.log("successfully connected to the database");
@@ -31,9 +48,27 @@ app.get("/", (req,res)=>{
     res.send("Home page has been started");
 });
 
+app.use(session(sessionOptions));
+app.use(flash());//To be used before routes
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+//Storing and unstoring information relating to the user in the session
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success"); //Any msg with success as code will be saved in the given variable
+    res.locals.error = req.flash("error"); //Any msg with success as code will be saved in the given variable
+    next();
+});
+
 app.use("/listings", listings);
 //This means any route starting with the /listings will get directed to listings
 app.use("/listings/:id/reviews", reviews);
+app.use("/", userRouter);
 
 
 
