@@ -12,6 +12,10 @@ const reviewSchema = new Schema({
     createdAt : {
         type : Date,
         default : Date.now()
+    },
+    author :{
+        type : Schema.Types.ObjectId,
+        ref : "user"
     }
 });
 //This will be a one to many model with the listings model and use ref as Review in listings

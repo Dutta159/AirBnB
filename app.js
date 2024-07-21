@@ -62,6 +62,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req,res,next)=>{
     res.locals.success = req.flash("success"); //Any msg with success as code will be saved in the given variable
     res.locals.error = req.flash("error"); //Any msg with success as code will be saved in the given variable
+    res.locals.currUser = req.user;
     next();
 });
 
