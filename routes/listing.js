@@ -7,28 +7,28 @@ const listingController = require("../controllers/listings.js");
 
 
 
+//This  is more compact method for storing routes
+// general routes created - > Router was used - >Now router.route is used
+router.route("/")
+.get(wrapAsync(listingController.index))
+.post(isLoggedIn, validateListing, wrapAsync(listingController.createListing));
 //This is the index route
-router.get("/", wrapAsync(listingController.index));
+//create route
+//In this validateListing is passed as a middleware 
+
 
 //New route
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
+router.route("/:id")
+.get( wrapAsync(listingController.showListing))
+.put(isLoggedIn,isOwner,validateListing, wrapAsync(listingController.updateListing))
+.delete(isLoggedIn, isOwner,wrapAsync(listingController.destroyListings));
 //Show route
-router.get("/:id", wrapAsync(listingController.showListing));
-
-//create route
-//In this validateListing is passed as a middleware 
-router.post("/",isLoggedIn, validateListing, wrapAsync(listingController.createListing));
+//Delete route
+//update route
 
 //Edit route
 router.get("/:id/edit",isLoggedIn,isOwner, wrapAsync(listingController.renderEditForm));
-
-//update route
-router.put("/:id",isLoggedIn,isOwner,validateListing, wrapAsync(listingController.updateListing)); 
-
-
-//Delete route
-router.delete("/:id",isLoggedIn, isOwner,wrapAsync(listingController.destroyListings));
-
 
 module.exports =  router;
