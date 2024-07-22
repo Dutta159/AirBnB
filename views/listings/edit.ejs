@@ -3,8 +3,8 @@
     <div class="row">   
         <!-- This is used to get all the form in a single row and then divide it into 12 columns -->
         <div class="col-8 offset-2">
-            <h3>Create a new listing</h3>
-            <form action="/listings/<%=listing.id%>?_method=PUT" method="POST" novalidate class="needs-validation">
+            <h3>Edit listing</h3>
+            <form action="/listings/<%=listing.id%>?_method=PUT" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" name="listing[title]" value="<%=listing.title%>" class="form-control" required >
@@ -17,9 +17,8 @@
                     <div class="invalid-feedback">Please Enter a valid Description</div>
                 </div>
                 <div class="mb-3">
-                    <label for="image" class="form-label">Image</label>
-                    <input type="text" name="listing[image]" value="<%=listing.image%>" class="form-control" required>
-                    <div class="invalid-feedback">Please Enter a valid image url</div>
+                    <label for="image" class="form-label">Upload new Image</label>
+                    <input type="file" name="listing[image]"  class="form-control">
                 </div>
                <div class="row">
                 <div class="mb-3 col-md-4">

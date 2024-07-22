@@ -4,7 +4,8 @@
         <!-- This is used to get all the form in a single row and then divide it into 12 columns -->
         <div class="col-8 offset-2">
             <h3>Create a new listing</h3>
-            <form action="/listings" method="POST" novalidate class="needs-validation"> 
+            <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+                 <!--enctype means encoding type that allows to store files and other forms to backend  -->
                 <!-- novalidate removes the default validation of the browser -->
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
@@ -19,8 +20,8 @@
                     <div class="invalid-feedback">Please Enter a valid Description</div>
                 </div>
                 <div class="mb-3">
-                    <label for="image" class="form-label">Image</label>
-                    <input type="text" name="listing[image]" placeholder="Enter image/url" class="form-control">
+                    <label for="image" class="form-label">Upload Image</label>
+                    <input type="file" name="listing[image]"  class="form-control" required>
                 </div>
                <div class="row">
                 <div class="mb-3 col-md-4">
