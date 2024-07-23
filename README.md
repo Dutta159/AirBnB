@@ -42,8 +42,8 @@ To get a local copy up and running, follow these steps:
 
 1. **Clone the repository:**
     ```sh
-    git clone https://github.com/yourusername/airbnb-clone.git
-    cd airbnb-clone
+    git clone https://github.com/Dutta159/AirBnB.git
+    cd airBnB
     ```
 
 2. **Install dependencies for the backend:**
@@ -99,4 +99,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 Your Name - [yph2412@gmail.com](mailto:yph2412@gmail.com)
 
-Project Link: [https://github.com/yourusername/airbnb-clone](https://github.com/yourusername/airbnb-clone)
+Project Link: [https://github.com/Dutta159/AirBnB.git](https://github.com/Dutta159/AirBnB.git)
