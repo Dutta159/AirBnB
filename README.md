@@ -43,7 +43,7 @@ To get a local copy up and running, follow these steps:
 1. **Clone the repository:**
     ```sh
     git clone https://github.com/Dutta159/AirBnB.git
-    cd airBnB
+    cd AirBnB
     ```
 
 2. **Install dependencies for the backend:**
