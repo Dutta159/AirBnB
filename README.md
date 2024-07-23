@@ -1,4 +1,4 @@
-# Airbnb Clone
+# Tourism Project
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -97,6 +97,6 @@ Contributions are what make the open-source community such an amazing place to l
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
-Your Name - [yph2412@gmail.com](mailto:yph2412@gmail.com)
+Contact - [yph2412@gmail.com](mailto:yph2412@gmail.com)
 
 Project Link: [https://tourism-project-20j2.onrender.com](https://tourism-project-20j2.onrender.com)
