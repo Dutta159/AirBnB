@@ -1,4 +1,5 @@
 const Listing = require("../models/listing.js");
+const { geocodeQuery } = require('../utils/geocoder.js');
 
 
 module.exports.index  = async(req,res)=>{
@@ -20,6 +21,7 @@ module.exports.showListing = async (req,res)=>{
         req.flash("error", "Listing does not exist");
         res.redirect("/listings");
     }
+
     // console.log(listing);
     res.render("./listings/show.ejs", {listing});
 }
@@ -30,6 +32,13 @@ module.exports.createListing = async (req,res)=>{
     const newListing = new Listing(req.body.listing);
     newListing.owner = req.user._id;
     newListing.image = {url,filename};
+    const queryString = newListing.location;
+    const resultLimit = 1; // We only need the first result for coordinates
+
+    let coordinates = await geocodeQuery(queryString, resultLimit)
+
+    console.log(coordinates,"This is the result")
+    newListing.coordinates = coordinates;
     await newListing.save();
     req.flash("success", "New listing created!!");
     res.redirect("/listings");

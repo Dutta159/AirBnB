@@ -13,6 +13,7 @@ const ExpressError = require("./utils/ExpressError.js");
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash =  require("connect-flash");
 const passport = require("passport");
 const LocalStrategy =  require("passport-local");
@@ -29,8 +30,24 @@ app.use(express.json());
 app.engine("ejs",ejsMate);  //Used for ejs mate
 app.use(express.static(path.join(__dirname,"public")));
 
+//using dbUrl as the url will store the data in the cloud mongo
+const dbUrl = process.env.ATLASDB_URL;
+
+const store  = MongoStore.create({
+    mongoUrl : dbUrl,
+    crypto : {
+        secret : process.env.SECRET,
+    },
+    touchAfter : 3600*24,
+    // This is the interval between a session update 
+});
+store.on("error", ()=>{
+    console.log("Mongo Session store error", err);
+});
+
 const sessionOptions = {
-    secret: "your secret code",
+    store : store,
+    secret: process.env.SECRET,
     resave : false,
     saveUninitialized : true,
     cookie : {
@@ -41,17 +58,19 @@ const sessionOptions = {
 };
 
 
+
+
 main().then(res => {
     console.log("successfully connected to the database");
 }).catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
+  await mongoose.connect(dbUrl);
 }
 
-app.get("/", (req,res)=>{
-    res.send("Home page has been started");
-});
+// app.get("/", (req,res)=>{
+//     res.send("Home page has been started");
+// });
 
 app.use(session(sessionOptions));
 app.use(flash());//To be used before routes

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
+const { array } = require("joi");
 
 const listingSchema = new Schema({
     title : {
@@ -24,7 +25,15 @@ const listingSchema = new Schema({
     owner : {
       type: Schema.Types.ObjectId,
       ref: "user"
-    }  
+    },
+    coordinates :{
+      type : Array,
+    },
+    //This is a bad practice actually data should be stored in geoJson format
+    // category :{
+    //   type : String,
+    //   enum : ["Mountains", "Deserts", "Cities", "Monuments"] 
+    // }
 });
 
 
